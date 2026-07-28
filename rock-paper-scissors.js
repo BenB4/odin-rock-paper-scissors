@@ -1,5 +1,4 @@
-let userScore = 0;
-let computerScore = 0;
+
 
 function getComputerChoice() {
     let choiceNumber = Math.floor(Math.random() * 3);
@@ -26,6 +25,7 @@ function getUserChoice() {
 
 
 function playRound(userChoice, computerChoice) {
+    // returns true if user wins, null if a tie
     let winMsg = "You win! " + userChoice + " beats " + computerChoice;
     let loseMsg = "You Lose! " + userChoice + " loses to " + computerChoice;
     let tieMsg = "Tie! " + userChoice + " ties with " + computerChoice;
@@ -44,6 +44,24 @@ function playRound(userChoice, computerChoice) {
     }
 }
 
+function playGame() {
+    let userScore = 0;
+    let computerScore = 0;
+    let roundResult = null;
 
-let userChoice = getUserChoice();
-let computerScore = getComputerChoice();
+    for (let i = 0; i < 5; i++) {
+        roundResult = playRound(getUserChoice(), getComputerChoice())
+        if (roundResult == null) {
+            userScore += 0.5;
+            computerScore += 0.5;
+        } else {
+            roundResult ? userScore++ : computerScore++
+        }
+    }    
+    const scoreDisplay = "User: " + userScore + " Computer: " + computerScore
+    userScore == computerScore ? console.log("Tie! Nobody wins! " + scoreDisplay)
+        : userScore > computerScore ? console.log("You win! " + scoreDisplay)
+        : console.log("You lose! " + scoreDisplay)
+}
+
+playGame()
