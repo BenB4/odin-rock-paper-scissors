@@ -24,44 +24,41 @@ function getUserChoice() {
 
 
 
-function playRound(userChoice, computerChoice) {
+function playRound(event, userChoice, computerChoice) {
     // returns true if user wins, null if a tie
     let winMsg = "You win! " + userChoice + " beats " + computerChoice;
     let loseMsg = "You Lose! " + userChoice + " loses to " + computerChoice;
     let tieMsg = "Tie! " + userChoice + " ties with " + computerChoice;
     if (userChoice == computerChoice) {
-        console.log(tieMsg)
-        return null
+        resultDiv.textContent = (tieMsg)
     } else if (userChoice == "rock") {
-        console.log(computerChoice == "paper" ? loseMsg : winMsg)
-        return computerChoice == "paper" ? false : true
+        resultDiv.textContent = (computerChoice == "paper" ? loseMsg : winMsg)
+        computerChoice == "paper" ? computerScore.textContent++ : playerScore.textContent++
     } else if (userChoice == "paper") {
-        console.log(computerChoice == "paper" ? loseMsg : winMsg)
-        return computerChoice == "scissors" ? false : true
+        resultDiv.textContent = (computerChoice == "paper" ? loseMsg : winMsg)
+        computerChoice == "scissors" ? computerScore.textContent++ : playerScore.textContent++
     } else {
-        console.log(computerChoice == "paper" ? loseMsg : winMsg)
-        return computerChoice == "rock" ? false : true
+        resultDiv.textContent = (computerChoice == "paper" ? loseMsg : winMsg)
+        computerChoice == "rock" ? computerScore.textContent++ : playerScore.textContent++
+    }
+    checkWinner()
+}
+
+function checkWinner() {
+    if (playerScore.textContent >= 5) {
+        resultDiv.textContent = "You won 5 rounds! GG!";
+    } else if (computerScore.textContent >= 5) {
+        resultDiv.textContent = "You lost 5 rounds :(. GG Computer!"
     }
 }
 
-function playGame() {
-    let userScore = 0;
-    let computerScore = 0;
-    let roundResult = null;
 
-    for (let i = 0; i < 5; i++) {
-        roundResult = playRound(getUserChoice(), getComputerChoice())
-        if (roundResult == null) {
-            userScore += 0.5;
-            computerScore += 0.5;
-        } else {
-            roundResult ? userScore++ : computerScore++
-        }
-    }    
-    const scoreDisplay = "User: " + userScore + " Computer: " + computerScore
-    userScore == computerScore ? console.log("Tie! Nobody wins! " + scoreDisplay)
-        : userScore > computerScore ? console.log("You win! " + scoreDisplay)
-        : console.log("You lose! " + scoreDisplay)
-}
+const userOptionsDiv = document.getElementById("playerOptions");
+const options = Array.from(userOptionsDiv.children);
+const resultDiv = document.getElementById("resultMsg");
+const playerScore = document.getElementById("playerScore");
+const computerScore = document.getElementById("computerScore");
 
-playGame()
+options.forEach((choice) => {
+    choice.addEventListener("click", (e) => playRound(e, choice.id, getComputerChoice()))
+})
